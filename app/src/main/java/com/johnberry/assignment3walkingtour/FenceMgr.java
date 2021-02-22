@@ -89,7 +89,7 @@ class FenceMgr {
 
         fenceList.clear();
         fenceList.addAll(fences);
-
+        System.out.println("In addFences");
         for (FenceData fd : fenceList) {
             Geofence geofence = new Geofence.Builder()
                     .setRequestId(fd.getId())
@@ -97,7 +97,7 @@ class FenceMgr {
                             fd.getLat(),
                             fd.getLon(),
                             fd.getRadius())
-                    .setTransitionTypes(fd.getType())
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
                     .setExpirationDuration(Geofence.NEVER_EXPIRE) //Fence expires after N millis  -or- Geofence.NEVER_EXPIRE
                     .build();
 

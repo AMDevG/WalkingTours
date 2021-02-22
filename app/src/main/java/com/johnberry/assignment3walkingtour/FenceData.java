@@ -11,16 +11,16 @@ public class FenceData implements Serializable {
     private final double lon;
     private final String address;
     private final float radius;
-    private final int type;
+//    private final int type;
     private final String fenceColor;
 
-    FenceData(String id, double lat, double lon, String address, float radius, int type, String fenceColor) {
+    FenceData(String id, double lat, double lon, String address, float radius, String fenceColor) {
         this.id = id;
         this.lat = lat;
         this.lon = lon;
         this.address = address;
         this.radius = radius;
-        this.type = type;
+//        this.type = type;
         this.fenceColor = fenceColor;
     }
 
@@ -36,9 +36,9 @@ public class FenceData implements Serializable {
         return radius;
     }
 
-    int getType() {
-        return type;
-    }
+//    int getType() {
+//        return type;
+//    }
 
 
     String getFenceColor() {
@@ -63,7 +63,7 @@ public class FenceData implements Serializable {
                 ", lon=" + lon +
                 ", address='" + address + '\'' +
                 ", radius=" + radius +
-                ", type=" + type +
+//                ", type=" + type +
                 ", fenceColor='" + fenceColor + '\'' +
                 '}';
     }
