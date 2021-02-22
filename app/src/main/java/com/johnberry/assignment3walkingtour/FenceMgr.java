@@ -99,7 +99,6 @@ class FenceMgr {
                             fd.getLat(),
                             fd.getLon(),
                             fd.getRadius())
-                    .setTransitionTypes(fd.getType())
                     .setExpirationDuration(Geofence.NEVER_EXPIRE) //Fence expires after N millis  -or- Geofence.NEVER_EXPIRE
                     .build();
 

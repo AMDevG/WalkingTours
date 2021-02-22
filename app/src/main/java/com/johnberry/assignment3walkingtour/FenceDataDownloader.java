@@ -24,7 +24,7 @@ class FenceDataDownloader implements Runnable {
     private static final String TAG = "FenceDataDownloader";
     private final Geocoder geocoder;
     private final FenceMgr fenceMgr;
-    private static final String FENCE_URL = "http://www.christopherhield.com/data/fences.json";
+    private static final String FENCE_URL = "http://www.christopherhield.com/data/WalkingTourContent.json";
 
     FenceDataDownloader(MapsActivity mapsActivity, FenceMgr fenceMgr) {
         this.fenceMgr = fenceMgr;
@@ -45,16 +45,22 @@ class FenceDataDownloader implements Runnable {
                 String id = fObj.getString("id");
                 String address = fObj.getString("address");
                 float rad = (float) fObj.getDouble("radius");
-                int type = fObj.getInt("type");
+//                int type = fObj.getInt("type");
                 String color = fObj.getString("fenceColor");
 
                 LatLng ll = getLatLong(address);
 
                 if (ll != null) {
-                    FenceData fd = new FenceData(id, ll.latitude, ll.longitude, address, rad, type, color);
+                    FenceData fd = new FenceData(id, ll.latitude, ll.longitude, address, rad, color);
                     fences.add(fd);
                 }
             }
+
+//            for(FenceData fd: fences){
+//                System.out.println("Received fd: " + fd);
+//                System.out.println("------------------");
+//            }
+
             fenceMgr.addFences(fences);
         } catch (Exception e) {
             e.printStackTrace();
