@@ -248,11 +248,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         try {
             List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
             Address address = addresses.get(0);
-            addressText.setText(address.getAddressLine(0));
+//            addressText.setText(address.getAddressLine(0));
 
         } catch (IOException e) {
             e.printStackTrace();
-            addressText.setText("");
+//            addressText.setText("");
         }
 
 
@@ -261,7 +261,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         if (latLonHistory.size() == 1) { // First update
-            mMap.addMarker(new MarkerOptions().alpha(0.5f).position(latLng).title("My Origin"));
+            mMap.addMarker(new MarkerOptions().alpha(0.25f).position(latLng).title("Me"));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
             zooming = true;
             return;
