@@ -226,7 +226,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void setupZoomListener() {
         mMap.setOnCameraIdleListener(() -> {
             if (zooming) {
-                Log.d(TAG, "onCameraIdle: DONE ZOOMING: " + mMap.getCameraPosition().zoom);
+//                Log.d(TAG, "onCameraIdle: DONE ZOOMING: " + mMap.getCameraPosition().zoom);
                 zooming = false;
                 oldZoom = mMap.getCameraPosition().zoom;
             }
@@ -234,7 +234,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.setOnCameraMoveListener(() -> {
             if (mMap.getCameraPosition().zoom != oldZoom) {
-                Log.d(TAG, "onCameraMove: ZOOMING: " + mMap.getCameraPosition().zoom);
+//                Log.d(TAG, "onCameraMove: ZOOMING: " + mMap.getCameraPosition().zoom);
                 zooming = true;
             }
         });

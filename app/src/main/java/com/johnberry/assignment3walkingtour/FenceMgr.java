@@ -58,7 +58,6 @@ class FenceMgr {
     }
 
     void drawFences() {
-
         for (FenceData fd : fenceList) {
             drawFence(fd);
         }
@@ -69,7 +68,6 @@ class FenceMgr {
             c.remove();
         circles.clear();
     }
-
 
     private void drawFence(FenceData fd) {
 
@@ -99,6 +97,7 @@ class FenceMgr {
                             fd.getLat(),
                             fd.getLon(),
                             fd.getRadius())
+                    .setTransitionTypes(fd.getType())
                     .setExpirationDuration(Geofence.NEVER_EXPIRE) //Fence expires after N millis  -or- Geofence.NEVER_EXPIRE
                     .build();
 
@@ -123,8 +122,6 @@ class FenceMgr {
                     });
         }
         mapsActivity.runOnUiThread(this::drawFences);
-
-
     }
 
     private PendingIntent getGeofencePendingIntent() {
