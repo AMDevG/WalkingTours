@@ -222,6 +222,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             if (permSum == permCount) {
                 determineLocation();
+
             } else {
                 Toast.makeText(this,
                         "Required permissions not granted: " + sb.toString(),
@@ -239,12 +240,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-//        locationListener = new MyLocListener(this);
+        locationListener = new MyLocListener(this);
 
         //minTime	    long: minimum time interval between location updates, in milliseconds
         //minDistance	float: minimum distance between location updates, in meters
-//        if (checkPermission() && locationManager != null)
-//            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, locationListener);
+        if (checkPermission() && locationManager != null)
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, locationListener);
 
 
     }
