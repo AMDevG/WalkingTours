@@ -22,7 +22,7 @@ import java.util.Locale;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private static final int SPLASH_TIME_OUT = 5000;
+    private static final int SPLASH_TIME_OUT = 2000;
     private LocationManager locationManager;
     private MapsActivity mapsActivity;
     private MyLocListener locationListener;
@@ -41,16 +41,16 @@ public class SplashActivity extends AppCompatActivity {
 
         // Handler is used to execute something in the future
 
-//            new Handler().postDelayed(() -> {
-//                // This method will be executed once the timer is over
-//                // Start your app main activity
-//                Intent i =
-//                        new Intent(SplashActivity.this, MapsActivity.class);
-//                startActivity(i);
-//                overridePendingTransition(R.anim.slide_in, R.anim.slide_out); // new act, old act
-//                // close this activity
-//                finish();
-//            }, SPLASH_TIME_OUT);
+            new Handler().postDelayed(() -> {
+                // This method will be executed once the timer is over
+                // Start your app main activity
+                Intent i =
+                        new Intent(SplashActivity.this, MapsActivity.class);
+                startActivity(i);
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out); // new act, old act
+                // close this activity
+                finish();
+            }, SPLASH_TIME_OUT);
     }
 
     private boolean checkPermission() {
@@ -159,6 +159,7 @@ public class SplashActivity extends AppCompatActivity {
                 Toast.makeText(this,
                         "Required permissions not granted: " + sb.toString(),
                         Toast.LENGTH_LONG).show();
+                finish();
             }
         } else if (requestCode == BGLOC_ONLY_PERM_REQUEST) {
             if (permissions[0].equals(Manifest.permission.ACCESS_BACKGROUND_LOCATION) &&
