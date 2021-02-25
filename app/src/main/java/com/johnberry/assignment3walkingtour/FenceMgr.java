@@ -92,7 +92,7 @@ class FenceMgr {
         System.out.println("In addFences");
         for (FenceData fd : fenceList) {
             Geofence geofence = new Geofence.Builder()
-                    .setRequestId(fd.getId())
+                     .setRequestId(fd.getId())
                     .setCircularRegion(
                             fd.getLat(),
                             fd.getLon(),
