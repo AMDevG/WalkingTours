@@ -62,7 +62,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     //      android:usesCleartextTraffic="true"
 
     private static final String TAG = "MapsActivity";
-
+    private boolean fullScreen = false;
     private GoogleMap mMap;
     private static final int LOC_COMBO_REQUEST = 111;
     private static final int LOC_ONLY_PERM_REQUEST = 222;
@@ -245,21 +245,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //minTime	    long: minimum time interval between location updates, in milliseconds
         //minDistance	float: minimum distance between location updates, in meters
         if (checkPermission() && locationManager != null)
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 20, locationListener);
 
 
     }
 
-    public void showClicked(View v) {
-        CheckBox cb = (CheckBox) v;
-
-        if (cb.isChecked()) {
-            fenceMgr.drawFences();
-        } else {
-            fenceMgr.eraseFences();
-        }
-
-    }
 
     public GoogleMap getMap() {
         return mMap;
@@ -317,7 +307,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         if (latLonHistory.size() == 1) { // First update
-            mMap.addMarker(new MarkerOptions().alpha(0.25f).position(latLng).title("Me"));
+//            mMap.addMarker(new MarkerOptions().alpha(0.25f).position(latLng).title("Me"));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
             zooming = true;
             return;
@@ -342,10 +332,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 BitmapDescriptor iconBitmap = BitmapDescriptorFactory.fromBitmap(resized);
 
-                MarkerOptions options = new MarkerOptions();
-                options.position(latLng);
-                options.icon(iconBitmap);
-                options.rotation(location.getBearing());
+                    MarkerOptions options = new MarkerOptions();
+                    options.position(latLng);
+                    options.icon(iconBitmap);
+                    options.rotation(location.getBearing());
 
                 if (carMarker != null) {
                     carMarker.remove();
@@ -418,4 +408,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         }
     }
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            if (fullScreen) {
+                hideSystemUI();
+            } else {
+                showSystemUI();
+            }
+        }
+    }
+
+    private void hideSystemUI() {
+        // Enables regular immersive mode.
+        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
+        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE
+                        // Set the content to appear under the system bars so that the
+                        // content doesn't resize when the system bars hide and show.
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        // Hide the nav bar and status bar
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+    }
+
+    // Shows the system bars by removing all the flags
+    // except for the ones that make the content appear under the system bars.
+    private void showSystemUI() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+    }
+
 }
