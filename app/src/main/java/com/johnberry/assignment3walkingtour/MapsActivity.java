@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -116,18 +117,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.animateCamera(CameraUpdateFactory.zoomTo(16.0f));
         zooming = true;
 
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+        mMap.getUiSettings().setRotateGesturesEnabled(false);
         mMap.setBuildingsEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.getUiSettings().setMapToolbarEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        mMap.getUiSettings().setIndoorLevelPickerEnabled(true);
 
         if (checkPermission()) {
             setupLocationListener();
             setupZoomListener();
         }
-
 
     }
 
@@ -325,17 +326,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             llHistoryPolyline.setColor(Color.BLUE);
 
 
-            float r = getRadius();
+            int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+            float z = mMap.getCameraPosition().zoom;
+            float factor = (float) ((35.0 / 2.0 * z) - (355.0 / 2.0));
+            float multiplier = ((7.0f / 7200.0f) * screenWidth) - (1.0f / 20.0f);
+            float r = factor * multiplier;
+            Bitmap icon;
             if (r > 0) {
-                Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_left);
+
+                float bearing = location.getBearing();
+                MarkerOptions options = new MarkerOptions();
+                options.rotation(location.getBearing());
+                options.position(latLng);
+
+                if(bearing > 180.0) {
+                     icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_left);
+                }
+                else{
+                     icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_right);
+                }
                 Bitmap resized = Bitmap.createScaledBitmap(icon, (int) r, (int) r, false);
-
                 BitmapDescriptor iconBitmap = BitmapDescriptorFactory.fromBitmap(resized);
+                options.icon(iconBitmap);
 
-                    MarkerOptions options = new MarkerOptions();
-                    options.position(latLng);
-                    options.icon(iconBitmap);
-                    options.rotation(location.getBearing());
 
                 if (carMarker != null) {
                     carMarker.remove();
