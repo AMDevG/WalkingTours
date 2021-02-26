@@ -52,6 +52,7 @@ import com.johnberry.assignment3walkingtour.databinding.ActivityMapsBinding;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -438,6 +439,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         try {
             System.out.println("set Route Path received: " + routeData.get(0));
+
+            for(int i = 0; i < routeData.length(); i++){
+                String currPair = routeData.getString(i);
+                String[] coords = currPair.split(",");
+                System.out.println("LONGITUDE: " + coords[0]);
+                System.out.println("LATITUDE: " + coords[1]);
+
+            }
 
 
 

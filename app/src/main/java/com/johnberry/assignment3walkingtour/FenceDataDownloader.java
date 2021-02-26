@@ -47,12 +47,6 @@ class FenceDataDownloader implements Runnable {
             System.out.println("FDD - routeArray: ");
             System.out.println(routePathArray.get(0));
 
-            mapsActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mapsActivity.setRoutePath(routePathArray);
-                }
-            });
 
             for (int i = 0; i < jArr.length(); i++) {
                 JSONObject fObj = jArr.getJSONObject(i);
@@ -116,6 +110,13 @@ class FenceDataDownloader implements Runnable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+//            mapsActivity.runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mapsActivity.setRoutePath(routePathArray);
+//                }
+//            });
         }
     }
 
