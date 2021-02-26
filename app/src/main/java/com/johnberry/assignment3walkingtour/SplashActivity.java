@@ -1,6 +1,7 @@
 package com.johnberry.assignment3walkingtour;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -35,7 +36,9 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
         checkPermission();
+
         // Possibly chck perm's here
         // Possibly load required resources here
 

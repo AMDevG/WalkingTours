@@ -71,7 +71,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int BGLOC_ONLY_PERM_REQUEST = 333;
     private LocationManager locationManager;
     private LocationListener locationListener;
+
     private Polyline llHistoryPolyline;
+    private Polyline llRoutePolyline;
+
     private final ArrayList<LatLng> latLonHistory = new ArrayList<>();
     private boolean zooming = false;
     private float oldZoom;
@@ -331,19 +334,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             float factor = (float) ((35.0 / 2.0 * z) - (355.0 / 2.0));
             float multiplier = ((7.0f / 7200.0f) * screenWidth) - (1.0f / 20.0f);
             float r = factor * multiplier;
-            Bitmap icon;
-            if (r > 0) {
 
+            Bitmap icon;
+
+            if (r > 0) {
                 float bearing = location.getBearing();
                 MarkerOptions options = new MarkerOptions();
                 options.rotation(location.getBearing());
                 options.position(latLng);
 
-                if(bearing > 180.0) {
+                if(bearing > 180) {
                      icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_left);
+                     System.out.println("Bearing greater than 180: " + bearing);
+                }
+                else if(bearing < 180){
+                    icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_right);
+                    System.out.println("Bearing less than 180: " + bearing);
                 }
                 else{
-                     icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_right);
+                    icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_right);
                 }
                 Bitmap resized = Bitmap.createScaledBitmap(icon, (int) r, (int) r, false);
                 BitmapDescriptor iconBitmap = BitmapDescriptorFactory.fromBitmap(resized);
