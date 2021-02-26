@@ -24,7 +24,9 @@ class FenceDataDownloader implements Runnable {
     private static final String TAG = "FenceDataDownloader";
     private final Geocoder geocoder;
     private final FenceMgr fenceMgr;
+    private MapsActivity mapsActivity;
     private static final String FENCE_URL = "http://www.christopherhield.com/data/WalkingTourContent.json";
+    private JSONArray routePathArray = new JSONArray();
 
     FenceDataDownloader(MapsActivity mapsActivity, FenceMgr fenceMgr) {
         this.fenceMgr = fenceMgr;
@@ -40,6 +42,18 @@ class FenceDataDownloader implements Runnable {
         try {
             JSONObject jObj = new JSONObject(result);
             JSONArray jArr = jObj.getJSONArray("fences");
+
+            routePathArray = jObj.getJSONArray("path");
+            System.out.println("FDD - routeArray: ");
+            System.out.println(routePathArray.get(0));
+
+            mapsActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mapsActivity.setRoutePath(routePathArray);
+                }
+            });
+
             for (int i = 0; i < jArr.length(); i++) {
                 JSONObject fObj = jArr.getJSONObject(i);
                 String id = fObj.getString("id");

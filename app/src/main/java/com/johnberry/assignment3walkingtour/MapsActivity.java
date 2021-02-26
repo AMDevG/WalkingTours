@@ -50,6 +50,9 @@ import com.google.android.gms.maps.model.RoundCap;
 import com.google.android.gms.tasks.Task;
 import com.johnberry.assignment3walkingtour.databinding.ActivityMapsBinding;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -430,6 +433,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         }
     }
+
+    public void setRoutePath(JSONArray routeData){
+
+        try {
+            System.out.println("set Route Path received: " + routeData.get(0));
+
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
