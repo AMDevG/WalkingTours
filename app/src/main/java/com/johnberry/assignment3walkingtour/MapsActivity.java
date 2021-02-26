@@ -97,6 +97,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         checkLocationAccuracy();
         checkPermission();
 
+        new Thread(new RoutePathDownloader(this)).start();
+
         geocoder = new Geocoder(this);
     }
 
