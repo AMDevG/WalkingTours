@@ -80,6 +80,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Polyline llRoutePolyline;
 
     private final ArrayList<LatLng> latLonHistory = new ArrayList<>();
+    private  ArrayList<LatLng> latLonPath = new ArrayList<>();
     private boolean zooming = false;
     private float oldZoom;
     private Marker carMarker;
@@ -138,7 +139,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             setupLocationListener();
             setupZoomListener();
         }
-
     }
 
 
@@ -445,11 +445,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             for(int i = 0; i < routeData.length(); i++){
                 String currPair = routeData.getString(i);
                 String[] coords = currPair.split(",");
-                System.out.println("LONGITUDE: " + coords[0]);
-                System.out.println("LATITUDE: " + coords[1]);
+
+                double lat = Double.parseDouble(coords[1]);
+                double lng = Double.parseDouble(coords[0]);
+
+                LatLng latLng = new LatLng(lat, lng);
+                latLonPath.add(latLng); // Add the LL to our location history
 
             }
+            PolylineOptions polylineOptions = new PolylineOptions();
 
+            for (LatLng ll : latLonPath) {
+                polylineOptions.add(ll);
+            }
+
+            llRoutePolyline = mMap.addPolyline(polylineOptions);
+            llRoutePolyline.setEndCap(new RoundCap());
+            llRoutePolyline.setWidth(8);
+            llRoutePolyline.setColor(Color.YELLOW);
 
 
         } catch (JSONException e) {
