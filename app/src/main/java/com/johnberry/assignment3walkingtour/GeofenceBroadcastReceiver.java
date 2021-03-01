@@ -2,7 +2,9 @@ package com.johnberry.assignment3walkingtour;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
+import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +26,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
     private static final String TAG = "GeofenceBroadcastReceiv";
     private static final String NOTIFICATION_CHANNEL_ID = BuildConfig.APPLICATION_ID + ".channel";
 
+
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -42,7 +45,6 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
             // Here use the ID to get details stored.
             FenceData fd = FenceMgr.getFenceData(g.getRequestId());
             sendNotification(context, fd);
-
 
         }
     }
@@ -68,15 +70,25 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         // You could build a pending intent here to open an activity when the
         // notification is tapped. Not doing that here though.
 
+        Intent resultIntent = new Intent(context.getApplicationContext(), NotificationActivity.class);
+        resultIntent.putExtra("SOME DATA", "CHICAGO LANDMARK");
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        PendingIntent pi = PendingIntent.getActivity(
+                context.getApplicationContext(), getUniqueId(), resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        System.out.println("Created Pending Intent!");
+
         Notification notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.fence_notif)
-                .setContentTitle("Notification from '" + fd.getId() + "' Geofence")
+                .setContentTitle("New Walking Tour Notification")
                 .setSubText(fd.getId()) // small text at top left
                 .setContentText(fd.getAddress()) // Detail info
                 .setVibrate(new long[] {1, 1, 1})
                 .setAutoCancel(true)
                 .setLights(0xff0000ff, 300, 1000) // blue color
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setContentIntent(pi)
                 .build();
 
         notificationManager.notify(getUniqueId(), notification);

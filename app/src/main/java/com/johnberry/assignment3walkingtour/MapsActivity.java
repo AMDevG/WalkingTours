@@ -99,7 +99,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         checkPermission();
 
         new Thread(new RoutePathDownloader(this)).start();
-
         geocoder = new Geocoder(this);
     }
 
@@ -249,17 +248,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void setupLocationListener() {
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
         locationListener = new MyLocListener(this);
 
         //minTime	    long: minimum time interval between location updates, in milliseconds
         //minDistance	float: minimum distance between location updates, in meters
         if (checkPermission() && locationManager != null)
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 20, locationListener);
-
-
     }
-
 
     public GoogleMap getMap() {
         return mMap;
@@ -462,7 +457,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             llRoutePolyline = mMap.addPolyline(polylineOptions);
             llRoutePolyline.setEndCap(new RoundCap());
             llRoutePolyline.setWidth(8);
-            llRoutePolyline.setColor(Color.YELLOW);
+            llRoutePolyline.setColor(Color.GREEN);
 
 
         } catch (JSONException e) {
