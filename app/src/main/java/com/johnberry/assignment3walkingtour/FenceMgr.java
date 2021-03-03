@@ -89,7 +89,7 @@ class FenceMgr {
 
         fenceList.clear();
         fenceList.addAll(fences);
-        System.out.println("In addFences");
+//        System.out.println("In addFences");
         for (FenceData fd : fenceList) {
             Geofence geofence = new Geofence.Builder()
                      .setRequestId(fd.getId())
@@ -97,7 +97,7 @@ class FenceMgr {
                             fd.getLat(),
                             fd.getLon(),
                             fd.getRadius())
-                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                     .setExpirationDuration(Geofence.NEVER_EXPIRE) //Fence expires after N millis  -or- Geofence.NEVER_EXPIRE
                     .build();
 
@@ -126,15 +126,12 @@ class FenceMgr {
 
     private PendingIntent getGeofencePendingIntent() {
 
-        // Reuse the PendingIntent if we already have it.
         if (geofencePendingIntent != null) {
             return geofencePendingIntent;
         }
 
         Intent intent = new Intent(mapsActivity, GeofenceBroadcastReceiver.class);
 
-        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
-        // calling addGeofences() and removeGeofences().
         geofencePendingIntent = PendingIntent.getBroadcast(mapsActivity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         return geofencePendingIntent;
     }

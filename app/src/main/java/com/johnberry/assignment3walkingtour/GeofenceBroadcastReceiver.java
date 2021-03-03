@@ -52,6 +52,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
     public void sendNotification(Context context, FenceData fd) {
 
+//        System.out.println("Received notif from: " + fd.getId());
         NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -71,7 +72,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         // notification is tapped. Not doing that here though.
 
         Intent resultIntent = new Intent(context.getApplicationContext(), NotificationActivity.class);
-        resultIntent.putExtra("SOME DATA", "CHICAGO LANDMARK");
+        resultIntent.putExtra("FD", fd);
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                 | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
