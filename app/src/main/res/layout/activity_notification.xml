@@ -12,14 +12,14 @@
         android:layout_height="69dp"
         android:layout_marginTop="47dp"
         android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView3"
+        app:layout_constraintBottom_toTopOf="@+id/buildingImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/buildingImage"
         android:layout_width="368dp"
         android:layout_height="182dp"
         android:layout_marginStart="20dp"

@@ -56,11 +56,12 @@ class FenceDataDownloader implements Runnable {
 //                int type = fObj.getInt("type");
                 String color = fObj.getString("fenceColor");
                 String decrip = fObj.getString("description");
+                String imageURL = fObj.getString("image");
 
                 LatLng ll = getLatLong(address);
 
                 if (ll != null) {
-                    FenceData fd = new FenceData(id, ll.latitude, ll.longitude, address, rad, color, decrip);
+                    FenceData fd = new FenceData(id, ll.latitude, ll.longitude, address, rad, color, decrip, imageURL);
                     fences.add(fd);
                 }
             }
