@@ -96,9 +96,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //        addressText = findViewById(R.id.addressText);
 
         checkLocationAccuracy();
-        checkPermission();
+//        checkPermission();
 
-        new Thread(new RoutePathDownloader(this)).start();
+
         geocoder = new Geocoder(this);
     }
 
@@ -111,6 +111,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
+
     }
 
 
@@ -138,6 +139,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             setupLocationListener();
             setupZoomListener();
         }
+        new Thread(new RoutePathDownloader(this)).start();
     }
 
 

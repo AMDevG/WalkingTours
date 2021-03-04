@@ -82,12 +82,13 @@ public class RoutePathDownloader implements Runnable {
 
             routePathArray = jObj.getJSONArray("path");
 
+            if(mapsActivity != null){
             mapsActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     mapsActivity.setRoutePath(routePathArray);
                 }
-            });
+            });}
 
         } catch (Exception e) {
             e.printStackTrace();

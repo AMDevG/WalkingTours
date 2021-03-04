@@ -82,7 +82,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
         Notification notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.fence_notif)
-                .setContentTitle("New Walking Tour Notification")
+                .setContentTitle(fd.getId())
                 .setSubText(fd.getId()) // small text at top left
                 .setContentText(fd.getAddress()) // Detail info
                 .setVibrate(new long[] {1, 1, 1})
