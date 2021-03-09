@@ -10,10 +10,8 @@
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="391dp"
-        android:layout_height="480dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/tourPathCheck"
+        android:layout_width="385dp"
+        android:layout_height="525dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,8 +23,9 @@
         android:layout_width="163dp"
         android:layout_height="37dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="48dp"
         android:checked="true"
+        android:onClick="showRoutePath"
         android:text="Show Tour Path"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -35,41 +34,40 @@
 
     <CheckBox
         android:id="@+id/travelPathCheck"
-        android:layout_width="159dp"
-        android:layout_height="44dp"
+        android:layout_width="162dp"
+        android:layout_height="36dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="5dp"
         android:checked="true"
+        android:onClick="showTravelPath"
         android:text="Show Travel Path"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/geoFenceCheck"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tourPathCheck"
-        app:layout_constraintVertical_bias="0.023" />
+        app:layout_constraintTop_toBottomOf="@+id/tourPathCheck" />
 
     <CheckBox
         android:id="@+id/geoFenceCheck"
-        android:layout_width="165dp"
-        android:layout_height="43dp"
+        android:layout_width="163dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:checked="true"
+        android:onClick="showGeoFences"
         android:text="Show Geofences"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addressCheck"
-        app:layout_constraintVertical_bias="0.028" />
+        app:layout_constraintTop_toBottomOf="@+id/addressCheck" />
 
     <CheckBox
         android:id="@+id/addressCheck"
         android:layout_width="157dp"
         android:layout_height="38dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="16dp"
         android:checked="true"
         android:text="Show Addresses"
@@ -77,5 +75,18 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/map" />
+
+    <TextView
+        android:id="@+id/addressTextView"
+        android:layout_width="325dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="11dp"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.514"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/map"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

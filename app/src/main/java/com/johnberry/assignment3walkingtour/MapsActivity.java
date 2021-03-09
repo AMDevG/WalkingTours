@@ -93,7 +93,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-//        addressText = findViewById(R.id.addressText);
+        addressText = findViewById(R.id.addressTextView);
+
 
         checkLocationAccuracy();
 //        checkPermission();
@@ -303,7 +304,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         try {
             List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
             Address address = addresses.get(0);
-//            addressText.setText(address.getAddressLine(0));
+            addressText.setText(address.getAddressLine(0));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -389,6 +390,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         float multiplier = ((7.0f / 7200.0f) * screenWidth) - (1.0f / 20.0f);
         float r = factor * multiplier;
         return r;
+    }
+
+    public void showGeoFences(View v) {
+        CheckBox cb = (CheckBox) v;
+        if (cb.isChecked()) {
+            fenceMgr.drawFences();
+        } else {
+            fenceMgr.eraseFences();
+        }
+    }
+
+    public void showTravelPath(View v) {
+        CheckBox cb = (CheckBox) v;
+        if (cb.isChecked()) {
+            llHistoryPolyline.setVisible(true);
+        } else {
+            llHistoryPolyline.setVisible(false);
+        }
+    }
+
+    public void showRoutePath(View v) {
+        CheckBox cb = (CheckBox) v;
+        if (cb.isChecked()) {
+            llRoutePolyline.setVisible(true);
+        } else {
+            llRoutePolyline.setVisible(false);
+        }
     }
 
 
