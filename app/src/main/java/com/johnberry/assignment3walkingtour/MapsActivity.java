@@ -93,12 +93,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
 
         addressText = findViewById(R.id.addressTextView);
-
-
         checkLocationAccuracy();
-//        checkPermission();
-
-
         geocoder = new Geocoder(this);
     }
 
@@ -443,6 +438,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Log.d(TAG, "onSuccess: High Accuracy Already Present");
             initMap();
         });
+
+        /// ADD IN PROMPT IF LOCATION ACCURACY NOT SET - REQUEST?
 
         task.addOnFailureListener(this, e -> {
             if (e instanceof ResolvableApiException) {
