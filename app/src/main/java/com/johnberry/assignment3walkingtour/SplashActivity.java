@@ -39,21 +39,19 @@ public class SplashActivity extends AppCompatActivity {
 
         checkPermission();
 
-        // Possibly chck perm's here
-        // Possibly load required resources here
+    }
 
-        // Handler is used to execute something in the future
-
-            new Handler().postDelayed(() -> {
-                // This method will be executed once the timer is over
-                // Start your app main activity
-                Intent i =
-                        new Intent(SplashActivity.this, MapsActivity.class);
-                startActivity(i);
-                overridePendingTransition(R.anim.slide_in, R.anim.slide_out); // new act, old act
-                // close this activity
-                finish();
-            }, SPLASH_TIME_OUT);
+    private void makeTransition(){
+        new Handler().postDelayed(() -> {
+            // This method will be executed once the timer is over
+            // Start your app main activity
+            Intent i =
+                    new Intent(SplashActivity.this, MapsActivity.class);
+            startActivity(i);
+            overridePendingTransition(R.anim.slide_in, R.anim.slide_out); // new act, old act
+            // close this activity
+            finish();
+        }, SPLASH_TIME_OUT);
     }
 
     private boolean checkPermission() {
@@ -66,6 +64,7 @@ public class SplashActivity extends AppCompatActivity {
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOC_ONLY_PERM_REQUEST);
                 return false;
             }
+
             return true;
 
         } else {
@@ -118,6 +117,7 @@ public class SplashActivity extends AppCompatActivity {
             if (locationManager != null) {
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
             }
+            makeTransition();
         }
     }
 
@@ -132,6 +132,7 @@ public class SplashActivity extends AppCompatActivity {
             if (permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION) &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 requestBgPermission();
+                makeTransition();
             }
         } else if (requestCode == LOC_COMBO_REQUEST) {
             int permCount = permissions.length;
@@ -147,16 +148,7 @@ public class SplashActivity extends AppCompatActivity {
             if (permSum == permCount) {
 
                 determineLocation();
-                new Handler().postDelayed(() -> {
-                // This method will be executed once the timer is over
-                // Start your app main activity
-                Intent i =
-                        new Intent(SplashActivity.this, MapsActivity.class);
-                startActivity(i);
-                overridePendingTransition(R.anim.slide_in, R.anim.slide_out); // new act, old act
-                // close this activity
-                finish();
-            }, SPLASH_TIME_OUT);
+
 
             } else {
                 Toast.makeText(this,
@@ -168,16 +160,6 @@ public class SplashActivity extends AppCompatActivity {
             if (permissions[0].equals(Manifest.permission.ACCESS_BACKGROUND_LOCATION) &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 determineLocation();
-                new Handler().postDelayed(() -> {
-                // This method will be executed once the timer is over
-                // Start your app main activity
-                Intent i =
-                        new Intent(SplashActivity.this, MapsActivity.class);
-                startActivity(i);
-                overridePendingTransition(R.anim.slide_in, R.anim.slide_out); // new act, old act
-                // close this activity
-                finish();
-            }, SPLASH_TIME_OUT);
             }
         }
     }

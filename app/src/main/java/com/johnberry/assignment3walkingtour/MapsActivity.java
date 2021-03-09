@@ -139,6 +139,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             setupLocationListener();
             setupZoomListener();
         }
+
+        //Draws route path
         new Thread(new RoutePathDownloader(this)).start();
     }
 
@@ -339,20 +341,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             float r = factor * multiplier;
 
             Bitmap icon;
+            float rad = getRadius();
 
-            if (r > 0) {
-                float bearing = location.getBearing();
+            if (rad > 0) {
+
                 MarkerOptions options = new MarkerOptions();
                 options.rotation(location.getBearing());
                 options.position(latLng);
 
-                if(bearing > 180) {
+                if(location.getBearing() > 180) {
                      icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_left);
-                     System.out.println("Bearing greater than 180: " + bearing);
+                     System.out.println("Bearing greater than 180: " + location.getBearing());
                 }
-                else if(bearing < 180){
+                else if(location.getBearing() < 180){
                     icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_right);
-                    System.out.println("Bearing less than 180: " + bearing);
+                    System.out.println("Bearing less than 180: " + location.getBearing());
                 }
                 else{
                     icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_right);
@@ -377,8 +380,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private float getRadius() {
+//        float z = mMap.getCameraPosition().zoom;
+//        return 15f * z - 145f;
+
+        int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
         float z = mMap.getCameraPosition().zoom;
-        return 15f * z - 145f;
+        float factor = (float) ((35.0 / 2.0 * z) - (355.0 / 2.0));
+        float multiplier = ((7.0f / 7200.0f) * screenWidth) - (1.0f / 20.0f);
+        float r = factor * multiplier;
+        return r;
     }
 
 
