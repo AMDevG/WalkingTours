@@ -6,9 +6,11 @@ import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
@@ -80,6 +82,9 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
                 context.getApplicationContext(), getUniqueId(), resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         System.out.println("Created Pending Intent!");
 
+        Uri sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
+                "://" + context.getPackageName() + "/" + R.raw.notif_sound);
+
         Notification notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.fence_notif)
                 .setContentTitle(fd.getId())
@@ -88,7 +93,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
                 .setVibrate(new long[] {1, 1, 1})
                 .setAutoCancel(true)
                 .setLights(0xff0000ff, 300, 1000) // blue color
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setSound(sound)
                 .setContentIntent(pi)
                 .build();
 

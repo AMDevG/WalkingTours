@@ -397,10 +397,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void showTravelPath(View v) {
         CheckBox cb = (CheckBox) v;
-        if (cb.isChecked()) {
+        if (cb.isChecked() && llHistoryPolyline != null) {
             llHistoryPolyline.setVisible(true);
         } else {
-            llHistoryPolyline.setVisible(false);
+            if(llHistoryPolyline != null) {
+                llHistoryPolyline.setVisible(false);
+            }
         }
     }
 

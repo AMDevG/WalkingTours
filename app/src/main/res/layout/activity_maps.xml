@@ -24,14 +24,14 @@
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="386dp"
-        android:layout_height="517dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="385dp"
+        android:layout_height="498dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/addressTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
         tools:context=".MapsActivity" />
 
     <CheckBox
@@ -86,7 +86,9 @@
         android:layout_width="325dp"
         android:layout_height="22dp"
         android:layout_marginTop="12dp"
-        android:textSize="12sp"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.314"
         app:layout_constraintStart_toStartOf="parent"
