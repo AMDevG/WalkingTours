@@ -48,7 +48,6 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
 import com.google.android.gms.tasks.Task;
-import com.johnberry.assignment3walkingtour.databinding.ActivityMapsBinding;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -416,6 +415,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             llRoutePolyline.setVisible(true);
         } else {
             llRoutePolyline.setVisible(false);
+        }
+    }
+
+    public void showAddress(View v) {
+        CheckBox cb = (CheckBox) v;
+        if (cb.isChecked()) {
+                addressText.setVisibility(View.VISIBLE);
+        } else {
+            addressText.setVisibility(View.INVISIBLE);
         }
     }
 
