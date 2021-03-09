@@ -38,6 +38,11 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         checkPermission();
+        if(checkPermission()){
+            makeTransition();
+        }
+
+        System.out.println("Check Permission: " + checkPermission());
 
     }
 
@@ -74,6 +79,7 @@ public class SplashActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION) !=
                     PackageManager.PERMISSION_GRANTED) {
+                System.out.println("Access fine location not present");
                 perms.add(Manifest.permission.ACCESS_FINE_LOCATION);
             }
 
@@ -97,6 +103,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void requestBgPermission() {
+        System.out.println("In BGPermission");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 
             if (ContextCompat.checkSelfPermission(this,
@@ -110,7 +117,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void determineLocation() {
         if (checkPermission()) {
-
+            System.out.println("Check permission true; In determine locate");
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             locationListener = new MyLocListener(mapsActivity);
 
@@ -146,9 +153,7 @@ public class SplashActivity extends AppCompatActivity {
                 }
             }
             if (permSum == permCount) {
-
                 determineLocation();
-
 
             } else {
                 Toast.makeText(this,
