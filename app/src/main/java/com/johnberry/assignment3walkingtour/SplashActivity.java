@@ -34,40 +34,28 @@ public class SplashActivity extends AppCompatActivity {
     private static final int BGLOC_ONLY_PERM_REQUEST = 333;
     private NotificationManager notificationManager;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-//        checkPermission();
         if(checkPermission()){
-            System.out.println("\nCheck Permission is true\n\n");
             makeTransition();
         }
-        else{
-            System.out.println("\nCheck Permission is false\n\n");
-        }
-
-
     }
 
     private void makeTransition(){
         new Handler().postDelayed(() -> {
-            // This method will be executed once the timer is over
-            // Start your app main activity
             Intent i =
                     new Intent(SplashActivity.this, MapsActivity.class);
             startActivity(i);
-            overridePendingTransition(R.anim.slide_in, R.anim.slide_out); // new act, old act
-            // close this activity
+            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             finish();
         }, SPLASH_TIME_OUT);
     }
 
     private boolean checkPermission() {
 
-        // If R or greater, need to ask for these separately
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -86,7 +74,6 @@ public class SplashActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION) !=
                     PackageManager.PERMISSION_GRANTED) {
-                System.out.println("Access fine location not present");
                 perms.add(Manifest.permission.ACCESS_FINE_LOCATION);
             }
 
@@ -105,12 +92,10 @@ public class SplashActivity extends AppCompatActivity {
                 return false;
             }
         }
-
         return true;
     }
 
     public void requestBgPermission() {
-        System.out.println("In BGPermission");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 
             if (ContextCompat.checkSelfPermission(this,
@@ -118,13 +103,11 @@ public class SplashActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, BGLOC_ONLY_PERM_REQUEST);
             }
-
         }
     }
 
     private void determineLocation() {
         if (checkPermission()) {
-            System.out.println("Check permission true; In determine locate");
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             locationListener = new MyLocListener(mapsActivity);
 
@@ -143,14 +126,12 @@ public class SplashActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == LOC_ONLY_PERM_REQUEST && permissions.length > 0) {
-            System.out.println("Request is LOC ONLY, permissions > 0");
+//            System.out.println("Request is LOC ONLY, permissions > 0");
             if (permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION) &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 requestBgPermission();
-//                makeTransition();
             }
             else if (permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION) && grantResults[0] == PackageManager.PERMISSION_DENIED){
-                System.out.println("***-------- \n Fine location is denied");
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Location Required");
@@ -158,18 +139,15 @@ public class SplashActivity extends AppCompatActivity {
                 builder.setPositiveButton("OK", (dialog, id) -> finish());
                 AlertDialog dialog = builder.create();
                 dialog.show();
-
             }
-            //USER DENIES PERMISSIONS
             else{
                 Toast.makeText(this,
                         "Location is a required permission to use this app.",
                         Toast.LENGTH_LONG).show();
-//                checkPermission();
                 finish();
             }
         } else if (requestCode == LOC_COMBO_REQUEST) {
-            System.out.println("Request is LOC COMBO");
+
             int permCount = permissions.length;
             int permSum = 0;
             StringBuilder sb = new StringBuilder();
@@ -189,20 +167,19 @@ public class SplashActivity extends AppCompatActivity {
 //                finish();
             }
         } else if (requestCode == BGLOC_ONLY_PERM_REQUEST) {
-            System.out.println("Request is BGLOC ONLY");
+
             if (permissions[0].equals(Manifest.permission.ACCESS_BACKGROUND_LOCATION) &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 determineLocation();
             }
             else{
                 Toast.makeText(this,
-                        "Required permissions not granted: Background Location ",
+                        "Permissions not granted:Background Location. Please change in settings",
                         Toast.LENGTH_LONG).show();
                 finish();
             }
         }
     }
-
 
     @Override
     protected void onDestroy() {
@@ -213,7 +190,4 @@ public class SplashActivity extends AppCompatActivity {
         notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
     }
-
-
-
 }

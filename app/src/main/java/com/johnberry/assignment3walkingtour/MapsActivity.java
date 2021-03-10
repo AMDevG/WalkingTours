@@ -1,6 +1,5 @@
 package com.johnberry.assignment3walkingtour;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -28,7 +27,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationRequest;
@@ -52,19 +50,12 @@ import com.google.android.gms.tasks.Task;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
-
-    // Needs:
-    //      implementation 'com.google.android.gms:play-services-maps:17.0.0'
-    //      implementation 'com.google.android.gms:play-services-location:17.0.0'
-
-    //      android:usesCleartextTraffic="true"
 
     private static final String TAG = "MapsActivity";
     private boolean fullScreen = false;
@@ -102,13 +93,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void initMap() {
 
         fenceMgr = new FenceMgr(this);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
-
     }
 
 
@@ -136,15 +125,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             setupLocationListener();
             setupZoomListener();
         }
-
-        //Draws route path
+        //Calls API, stores and draws tour path
         new Thread(new RoutePathDownloader(this)).start();
     }
 
-
     private boolean checkPermission() {
 
-        // If R or greater, need to ask for these separately
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -185,25 +171,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
-    private void determineLocation() {
-        if (checkPermission()) {
-
-            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            locationListener = new MyLocListener(this);
-
-            if (locationManager != null) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
-            }
-        }
-    }
+//    private void determineLocation() {
+//        if (checkPermission()) {
+//
+//            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//            locationListener = new MyLocListener(this);
+//
+//            if (locationManager != null) {
+//                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
+//            }
+//        }
+//    }
 
     private void setupLocationListener() {
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationListener = new MyLocListener(this);
 
-        //minTime	    long: minimum time interval between location updates, in milliseconds
-        //minDistance	float: minimum distance between location updates, in meters
         if (checkPermission() && locationManager != null)
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 20, locationListener);
     }
@@ -229,7 +213,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void setupZoomListener() {
         mMap.setOnCameraIdleListener(() -> {
             if (zooming) {
-//                Log.d(TAG, "onCameraIdle: DONE ZOOMING: " + mMap.getCameraPosition().zoom);
                 zooming = false;
                 oldZoom = mMap.getCameraPosition().zoom;
             }
@@ -237,7 +220,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.setOnCameraMoveListener(() -> {
             if (mMap.getCameraPosition().zoom != oldZoom) {
-//                Log.d(TAG, "onCameraMove: ZOOMING: " + mMap.getCameraPosition().zoom);
                 zooming = true;
             }
         });
@@ -246,7 +228,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void updateLocation(Location location) {
 
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        latLonHistory.add(latLng); // Add the LL to our location history
+        latLonHistory.add(latLng);
 
         try {
             List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
@@ -255,7 +237,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         } catch (IOException e) {
             e.printStackTrace();
-//            addressText.setText("");
+            addressText.setText("");
         }
 
 
@@ -264,7 +246,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         if (latLonHistory.size() == 1) { // First update
-//            mMap.addMarker(new MarkerOptions().alpha(0.25f).position(latLng).title("Me"));
+            mMap.addMarker(new MarkerOptions().alpha(0.25f).position(latLng));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
             zooming = true;
             return;
@@ -313,24 +295,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 BitmapDescriptor iconBitmap = BitmapDescriptorFactory.fromBitmap(resized);
                 options.icon(iconBitmap);
 
-
                 if (carMarker != null) {
                     carMarker.remove();
                 }
-
                 carMarker = mMap.addMarker(options);
             }
         }
 
         if (!zooming)
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-
-
     }
 
     private float getRadius() {
-//        float z = mMap.getCameraPosition().zoom;
-//        return 15f * z - 145f;
 
         int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
         float z = mMap.getCameraPosition().zoom;
@@ -382,7 +358,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     private void checkLocationAccuracy() {
-
         Log.d(TAG, "checkLocationAccuracy: ");
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -397,7 +372,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             initMap();
         });
 
-        /// ADD IN PROMPT IF LOCATION ACCURACY NOT SET - REQUEST?
 
         task.addOnFailureListener(this, e -> {
             if (e instanceof ResolvableApiException) {
@@ -424,14 +398,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Log.d(TAG, "onActivityResult: ");
             initMap();
         } else {
-
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("High-Accuracy Location Services Required");
             builder.setMessage("High-Accuracy Location Services Required");
             builder.setPositiveButton("OK", (dialog, id) -> finish());
             AlertDialog dialog = builder.create();
             dialog.show();
-
         }
     }
 
@@ -460,15 +432,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             llRoutePolyline.setWidth(8);
             llRoutePolyline.setColor(Color.GREEN);
 
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
-
-
-
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -512,7 +479,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        System.out.println("OnDestroy in MapsActivity Called!");
+//        System.out.println("OnDestroy in MapsActivity Called!");
         NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
     }
@@ -520,7 +487,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onStop() {
         super.onStop();
-        System.out.println("OnStop in MapsActivity Called!");
+//        System.out.println("OnStop in MapsActivity Called!");
         NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
     }

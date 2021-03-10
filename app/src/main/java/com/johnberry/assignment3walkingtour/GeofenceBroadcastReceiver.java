@@ -23,8 +23,6 @@ import java.util.List;
 
 public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
-    // Receives message when somepne clicks on a notification
-
     private static final String TAG = "GeofenceBroadcastReceiv";
     private static final String NOTIFICATION_CHANNEL_ID = BuildConfig.APPLICATION_ID + ".channel";
 
@@ -38,19 +36,14 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
             Log.e(TAG, "Error: " + geofencingEvent.getErrorCode());
             return;
         }
-        // Get the geofences that were triggered. A single event can trigger
-        // multiple geofences.
+
         List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
 
         for (Geofence g : triggeringGeofences) {
-
-            // Here use the ID to get details stored.
             FenceData fd = FenceMgr.getFenceData(g.getRequestId());
             sendNotification(context, fd);
-
         }
     }
-
 
     public void sendNotification(Context context, FenceData fd) {
 
@@ -68,9 +61,6 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
             notificationManager.createNotificationChannel(channel);
         }
 
-
-        // You could build a pending intent here to open an activity when the
-        // notification is tapped. Not doing that here though.
 
         Intent resultIntent = new Intent(context.getApplicationContext(), NotificationActivity.class);
         resultIntent.putExtra("FD", fd);
