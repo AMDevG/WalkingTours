@@ -59,7 +59,7 @@ public class SplashActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                System.out.println(" \n IN CHECK PERMISSION, PERMISSION NOTGRANTED");
+//                System.out.println(" \n IN CHECK PERMISSION, PERMISSION NOTGRANTED");
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOC_ONLY_PERM_REQUEST);
                 return false;
@@ -159,6 +159,7 @@ public class SplashActivity extends AppCompatActivity {
                 }
             }
             if (permSum == permCount) {
+                System.out.println("PERM SUM == PERM COUNT; CALL LOCATION \n\n");
                 determineLocation();
             } else {
                 Toast.makeText(this,

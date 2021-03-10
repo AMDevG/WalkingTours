@@ -226,9 +226,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void updateLocation(Location location) {
+        Bitmap icon;
+        icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_left);
 
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         latLonHistory.add(latLng);
+
+        int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+        float z = mMap.getCameraPosition().zoom;
+        float factor = (float) ((35.0 / 2.0 * z) - (355.0 / 2.0));
+        float multiplier = ((7.0f / 7200.0f) * screenWidth) - (1.0f / 20.0f);
+        float r = factor * multiplier;
+        Bitmap resized = Bitmap.createScaledBitmap(icon, (int) r, (int) r, false);
+        BitmapDescriptor iconBitmap = BitmapDescriptorFactory.fromBitmap(resized);
 
         try {
             List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
@@ -245,8 +255,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             llHistoryPolyline.remove(); // Remove old polyline
         }
 
+
         if (latLonHistory.size() == 1) { // First update
-            mMap.addMarker(new MarkerOptions().alpha(0.25f).position(latLng));
+
+            mMap.addMarker(new MarkerOptions().alpha(0.25f).icon(iconBitmap).position(latLng));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
             zooming = true;
             return;
@@ -267,13 +279,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
 
 
-            int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
-            float z = mMap.getCameraPosition().zoom;
-            float factor = (float) ((35.0 / 2.0 * z) - (355.0 / 2.0));
-            float multiplier = ((7.0f / 7200.0f) * screenWidth) - (1.0f / 20.0f);
-            float r = factor * multiplier;
 
-            Bitmap icon;
+
             float rad = getRadius();
 
             if (rad > 0) {
@@ -291,9 +298,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 else{
                     icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_right);
                 }
-                Bitmap resized = Bitmap.createScaledBitmap(icon, (int) r, (int) r, false);
-                BitmapDescriptor iconBitmap = BitmapDescriptorFactory.fromBitmap(resized);
-                options.icon(iconBitmap);
 
                 if (carMarker != null) {
                     carMarker.remove();
