@@ -165,8 +165,8 @@ public class SplashActivity extends AppCompatActivity {
                 Toast.makeText(this,
                         "Location is a required permission to use this app.",
                         Toast.LENGTH_LONG).show();
-                checkPermission();
-//                finish();
+//                checkPermission();
+                finish();
             }
         } else if (requestCode == LOC_COMBO_REQUEST) {
             System.out.println("Request is LOC COMBO");
@@ -186,7 +186,7 @@ public class SplashActivity extends AppCompatActivity {
                 Toast.makeText(this,
                         "Required permissions not granted: " + sb.toString(),
                         Toast.LENGTH_LONG).show();
-                finish();
+//                finish();
             }
         } else if (requestCode == BGLOC_ONLY_PERM_REQUEST) {
             System.out.println("Request is BGLOC ONLY");
@@ -196,7 +196,7 @@ public class SplashActivity extends AppCompatActivity {
             }
             else{
                 Toast.makeText(this,
-                        "Required permissions not granted: ",
+                        "Required permissions not granted: Background Location ",
                         Toast.LENGTH_LONG).show();
                 finish();
             }
