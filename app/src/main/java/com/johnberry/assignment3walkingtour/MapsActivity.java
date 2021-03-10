@@ -307,11 +307,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 if(location.getBearing() > 180) {
                      icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_left);
-//                     System.out.println("Bearing greater than 180: " + location.getBearing());
                 }
                 else if(location.getBearing() < 180){
                     icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_right);
-//                    System.out.println("Bearing less than 180: " + location.getBearing());
                 }
                 else{
                     icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_right);
@@ -443,8 +441,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void setRoutePath(JSONArray routeData){
 
         try {
-            System.out.println("set Route Path received: " + routeData.get(0));
-
             for(int i = 0; i < routeData.length(); i++){
                 String currPair = routeData.getString(i);
                 String[] coords = currPair.split(",");

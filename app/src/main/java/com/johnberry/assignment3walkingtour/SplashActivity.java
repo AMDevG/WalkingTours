@@ -39,10 +39,11 @@ public class SplashActivity extends AppCompatActivity {
 
 //        checkPermission();
         if(checkPermission()){
+            System.out.println("\nCheck Permission is true\n\n");
             makeTransition();
         }
         else{
-            System.out.println("Check Permission is false");
+            System.out.println("\nCheck Permission is false\n\n");
         }
 
 
@@ -138,12 +139,21 @@ public class SplashActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == LOC_ONLY_PERM_REQUEST && permissions.length > 0) {
+            System.out.println("Request is LOC ONLY, permissions > 0");
             if (permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION) &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 requestBgPermission();
-                makeTransition();
+//                makeTransition();
+            }
+            //USER DENIES PERMISSIONS
+            else{
+                Toast.makeText(this,
+                        "Location is a required permission to use this app.",
+                        Toast.LENGTH_LONG).show();
+                finish();
             }
         } else if (requestCode == LOC_COMBO_REQUEST) {
+            System.out.println("Request is LOC COMBO");
             int permCount = permissions.length;
             int permSum = 0;
             StringBuilder sb = new StringBuilder();
@@ -156,7 +166,6 @@ public class SplashActivity extends AppCompatActivity {
             }
             if (permSum == permCount) {
                 determineLocation();
-
             } else {
                 Toast.makeText(this,
                         "Required permissions not granted: " + sb.toString(),
@@ -164,9 +173,16 @@ public class SplashActivity extends AppCompatActivity {
                 finish();
             }
         } else if (requestCode == BGLOC_ONLY_PERM_REQUEST) {
+            System.out.println("Request is BGLOC ONLY");
             if (permissions[0].equals(Manifest.permission.ACCESS_BACKGROUND_LOCATION) &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 determineLocation();
+            }
+            else{
+                Toast.makeText(this,
+                        "Required permissions not granted: ",
+                        Toast.LENGTH_LONG).show();
+                finish();
             }
         }
     }

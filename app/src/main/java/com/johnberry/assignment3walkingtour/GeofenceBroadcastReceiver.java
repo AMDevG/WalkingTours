@@ -54,7 +54,6 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
     public void sendNotification(Context context, FenceData fd) {
 
-//        System.out.println("Received notif from: " + fd.getId());
         NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -80,7 +79,6 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
         PendingIntent pi = PendingIntent.getActivity(
                 context.getApplicationContext(), getUniqueId(), resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        System.out.println("Created Pending Intent!");
 
         Uri sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
                 "://" + context.getPackageName() + "/" + R.raw.notif_sound);

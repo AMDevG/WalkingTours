@@ -44,9 +44,6 @@ class FenceDataDownloader implements Runnable {
             JSONArray jArr = jObj.getJSONArray("fences");
 
             routePathArray = jObj.getJSONArray("path");
-            System.out.println("FDD - routeArray: ");
-            System.out.println(routePathArray.get(0));
-
 
             for (int i = 0; i < jArr.length(); i++) {
                 JSONObject fObj = jArr.getJSONObject(i);
