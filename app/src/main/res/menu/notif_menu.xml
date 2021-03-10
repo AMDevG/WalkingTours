@@ -5,8 +5,7 @@
     tools:context="com.example.assignment1.CreateProfile">
 
     <item
-        android:id="@+id/notf_menu"
-        android:orderInCategory="100"
+        android:id="@+id/notif_menu"
         android:icon="@drawable/home_image"
         app:showAsAction="always"
         android:title="Notification" />

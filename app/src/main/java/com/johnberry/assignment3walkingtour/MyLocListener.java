@@ -17,7 +17,7 @@ public class MyLocListener implements LocationListener {
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        Log.d(TAG, "onLocationChanged: " + location);
+//        Log.d(TAG, "onLocationChanged: " + location);
         mapsActivity.updateLocation(location);
     }
 }

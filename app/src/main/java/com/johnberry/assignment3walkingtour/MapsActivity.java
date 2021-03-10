@@ -205,45 +205,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode,
-//                                           @NonNull String[] permissions,
-//                                           @NonNull int[] grantResults) {
-//
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//
-//        if (requestCode == LOC_ONLY_PERM_REQUEST) {
-//            if (permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION) &&
-//                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                requestBgPermission();
-//            }
-//        } else if (requestCode == LOC_COMBO_REQUEST) {
-//            int permCount = permissions.length;
-//            int permSum = 0;
-//            StringBuilder sb = new StringBuilder();
-//            for (int i = 0; i < permissions.length; i++) {
-//                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-//                    permSum++;
-//                } else {
-//                    sb.append(permissions[i]).append(", ");
-//                }
-//            }
-//            if (permSum == permCount) {
-//                determineLocation();
-//
-//            } else {
-//                Toast.makeText(this,
-//                        "Required permissions not granted: " + sb.toString(),
-//                        Toast.LENGTH_LONG).show();
-//            }
-//        } else if (requestCode == BGLOC_ONLY_PERM_REQUEST) {
-//            if (permissions[0].equals(Manifest.permission.ACCESS_BACKGROUND_LOCATION) &&
-//                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                determineLocation();
-//            }
-//        }
-//    }
-
     private void setupLocationListener() {
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -346,11 +307,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 if(location.getBearing() > 180) {
                      icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_left);
-                     System.out.println("Bearing greater than 180: " + location.getBearing());
+//                     System.out.println("Bearing greater than 180: " + location.getBearing());
                 }
                 else if(location.getBearing() < 180){
                     icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_right);
-                    System.out.println("Bearing less than 180: " + location.getBearing());
+//                    System.out.println("Bearing less than 180: " + location.getBearing());
                 }
                 else{
                     icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_right);

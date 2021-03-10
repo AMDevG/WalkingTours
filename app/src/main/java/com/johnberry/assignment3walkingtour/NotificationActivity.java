@@ -3,6 +3,7 @@ package com.johnberry.assignment3walkingtour;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -55,6 +56,10 @@ public class NotificationActivity extends Activity {
         titleTextView.setTypeface(myCustomFont);
         addressTextView.setTypeface(myCustomFont);
         descriptText.setTypeface(myCustomFont);
+
+//        ActionBar actionBar = getActionBar();
+//        actionBar.setDisplayShowHomeEnabled(true);
+//        actionBar.setIcon(R.drawable.home_image);
 
         loadImage();
     }
