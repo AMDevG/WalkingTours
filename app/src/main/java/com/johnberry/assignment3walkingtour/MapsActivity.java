@@ -468,10 +468,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         notificationManager.cancelAll();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancelAll();
-    }
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+//        notificationManager.cancelAll();
+//    }
 }
