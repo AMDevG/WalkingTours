@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -77,6 +78,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private Polyline llHistoryPolyline;
     private Polyline llRoutePolyline;
+    private boolean showHistoryLine = true;
 
     private final ArrayList<LatLng> latLonHistory = new ArrayList<>();
     private  ArrayList<LatLng> latLonPath = new ArrayList<>();
@@ -181,17 +183,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return true;
     }
 
-//    public void requestBgPermission() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//
-//            if (ContextCompat.checkSelfPermission(this,
-//                    Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                ActivityCompat.requestPermissions(this,
-//                        new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, BGLOC_ONLY_PERM_REQUEST);
-//            }
-//
-//        }
-//    }
+
 
     private void determineLocation() {
         if (checkPermission()) {
@@ -284,10 +276,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             for (LatLng ll : latLonHistory) {
                 polylineOptions.add(ll);
             }
-            llHistoryPolyline = mMap.addPolyline(polylineOptions);
-            llHistoryPolyline.setEndCap(new RoundCap());
-            llHistoryPolyline.setWidth(8);
-            llHistoryPolyline.setColor(Color.BLUE);
+
+            if(showHistoryLine) {
+                llHistoryPolyline = mMap.addPolyline(polylineOptions);
+                llHistoryPolyline.setEndCap(new RoundCap());
+                llHistoryPolyline.setWidth(8);
+                llHistoryPolyline.setColor(Color.BLUE);
+            }
 
 
             int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
@@ -357,9 +352,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void showTravelPath(View v) {
         CheckBox cb = (CheckBox) v;
         if (cb.isChecked() && llHistoryPolyline != null) {
+            showHistoryLine = true;
             llHistoryPolyline.setVisible(true);
         } else {
             if(llHistoryPolyline != null) {
+                showHistoryLine = false;
                 llHistoryPolyline.setVisible(false);
             }
         }
@@ -510,6 +507,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.out.println("OnDestroy in MapsActivity Called!");
+        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        System.out.println("OnStop in MapsActivity Called!");
+        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
     }
 
 }
