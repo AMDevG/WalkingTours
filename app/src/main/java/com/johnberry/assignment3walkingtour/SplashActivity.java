@@ -37,12 +37,14 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        checkPermission();
+//        checkPermission();
         if(checkPermission()){
             makeTransition();
         }
+        else{
+            System.out.println("Check Permission is false");
+        }
 
-        System.out.println("Check Permission: " + checkPermission());
 
     }
 
@@ -135,7 +137,7 @@ public class SplashActivity extends AppCompatActivity {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == LOC_ONLY_PERM_REQUEST) {
+        if (requestCode == LOC_ONLY_PERM_REQUEST && permissions.length > 0) {
             if (permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION) &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 requestBgPermission();
