@@ -100,7 +100,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-
     /**
      * This callback is triggered when the map is ready to be used.
      * If Google Play services is not installed on the device, the user will be prompted to install
@@ -169,20 +168,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return true;
     }
 
-
-
-//    private void determineLocation() {
-//        if (checkPermission()) {
-//
-//            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//            locationListener = new MyLocListener(this);
-//
-//            if (locationManager != null) {
-//                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
-//            }
-//        }
-//    }
-
     private void setupLocationListener() {
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -226,8 +211,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void updateLocation(Location location) {
-        Bitmap icon;
-        icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_left);
 
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         latLonHistory.add(latLng);
@@ -237,6 +220,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         float factor = (float) ((35.0 / 2.0 * z) - (355.0 / 2.0));
         float multiplier = ((7.0f / 7200.0f) * screenWidth) - (1.0f / 20.0f);
         float r = factor * multiplier;
+
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_left);
         Bitmap resized = Bitmap.createScaledBitmap(icon, (int) r, (int) r, false);
         BitmapDescriptor iconBitmap = BitmapDescriptorFactory.fromBitmap(resized);
 
@@ -252,13 +237,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         if (llHistoryPolyline != null) {
-            llHistoryPolyline.remove(); // Remove old polyline
+            llHistoryPolyline.remove();
         }
-
 
         if (latLonHistory.size() == 1) { // First update
 
-            mMap.addMarker(new MarkerOptions().alpha(0.25f).icon(iconBitmap).position(latLng));
+            if (carMarker != null) {
+                carMarker.remove();
+            }
+
+            MarkerOptions options = new MarkerOptions();
+            options.rotation(location.getBearing());
+            options.position(latLng);
+            options.icon(iconBitmap);
+
+            carMarker = mMap.addMarker(options);
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
             zooming = true;
             return;
@@ -266,7 +259,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         if (latLonHistory.size() > 1) { // Second (or more) update
             PolylineOptions polylineOptions = new PolylineOptions();
-
             for (LatLng ll : latLonHistory) {
                 polylineOptions.add(ll);
             }
@@ -277,33 +269,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 llHistoryPolyline.setWidth(8);
                 llHistoryPolyline.setColor(Color.BLUE);
             }
-
-
-
-
-            float rad = getRadius();
-
-            if (rad > 0) {
-
-                MarkerOptions options = new MarkerOptions();
-                options.rotation(location.getBearing());
-                options.position(latLng);
-
-                if(location.getBearing() > 180) {
-                     icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_left);
-                }
-                else if(location.getBearing() < 180){
-                    icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_right);
-                }
-                else{
-                    icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_right);
-                }
-
-                if (carMarker != null) {
-                    carMarker.remove();
-                }
-                carMarker = mMap.addMarker(options);
-            }
         }
 
         if (!zooming)
@@ -311,7 +276,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private float getRadius() {
-
         int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
         float z = mMap.getCameraPosition().zoom;
         float factor = (float) ((35.0 / 2.0 * z) - (355.0 / 2.0));
@@ -412,7 +376,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void setRoutePath(JSONArray routeData){
-
         try {
             for(int i = 0; i < routeData.length(); i++){
                 String currPair = routeData.getString(i);
@@ -426,7 +389,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
             PolylineOptions polylineOptions = new PolylineOptions();
-
             for (LatLng ll : latLonPath) {
                 polylineOptions.add(ll);
             }
@@ -454,24 +416,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void hideSystemUI() {
-        // Enables regular immersive mode.
-        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
-        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_IMMERSIVE
-                        // Set the content to appear under the system bars so that the
-                        // content doesn't resize when the system bars hide and show.
                         | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        // Hide the nav bar and status bar
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN);
     }
 
-    // Shows the system bars by removing all the flags
-    // except for the ones that make the content appear under the system bars.
     private void showSystemUI() {
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
@@ -483,7 +437,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        System.out.println("OnDestroy in MapsActivity Called!");
         NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
     }
@@ -491,9 +444,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onStop() {
         super.onStop();
-//        System.out.println("OnStop in MapsActivity Called!");
         NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
     }
-
 }
