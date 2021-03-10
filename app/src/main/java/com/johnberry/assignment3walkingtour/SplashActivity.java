@@ -2,6 +2,8 @@ package com.johnberry.assignment3walkingtour;
 
 import android.Manifest;
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -30,6 +32,7 @@ public class SplashActivity extends AppCompatActivity {
     private static final int LOC_COMBO_REQUEST = 111;
     private static final int LOC_ONLY_PERM_REQUEST = 222;
     private static final int BGLOC_ONLY_PERM_REQUEST = 333;
+    private NotificationManager notificationManager;
 
 
     @Override
@@ -68,6 +71,7 @@ public class SplashActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                System.out.println(" \n IN CHECK PERMISSION, PERMISSION NOTGRANTED");
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOC_ONLY_PERM_REQUEST);
                 return false;
@@ -145,12 +149,24 @@ public class SplashActivity extends AppCompatActivity {
                 requestBgPermission();
 //                makeTransition();
             }
+            else if (permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION) && grantResults[0] == PackageManager.PERMISSION_DENIED){
+                System.out.println("***-------- \n Fine location is denied");
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Location Required");
+                builder.setMessage("Location Services Required");
+                builder.setPositiveButton("OK", (dialog, id) -> finish());
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+            }
             //USER DENIES PERMISSIONS
             else{
                 Toast.makeText(this,
                         "Location is a required permission to use this app.",
                         Toast.LENGTH_LONG).show();
-                finish();
+                checkPermission();
+//                finish();
             }
         } else if (requestCode == LOC_COMBO_REQUEST) {
             System.out.println("Request is LOC COMBO");
@@ -193,5 +209,11 @@ public class SplashActivity extends AppCompatActivity {
         super.onDestroy();
         if (locationManager != null && locationListener != null)
             locationManager.removeUpdates(locationListener);
+
+        notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
     }
+
+
+
 }
