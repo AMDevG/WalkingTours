@@ -215,11 +215,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         latLonHistory.add(latLng);
 
-        int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
-        float z = mMap.getCameraPosition().zoom;
-        float factor = (float) ((35.0 / 2.0 * z) - (355.0 / 2.0));
-        float multiplier = ((7.0f / 7200.0f) * screenWidth) - (1.0f / 20.0f);
-        float r = factor * multiplier;
+        float r = getRadius();
 
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_left);
         Bitmap resized = Bitmap.createScaledBitmap(icon, (int) r, (int) r, false);
@@ -235,7 +231,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             addressText.setText("");
         }
 
-
         if (llHistoryPolyline != null) {
             llHistoryPolyline.remove();
         }
@@ -246,18 +241,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 carMarker.remove();
             }
 
-            MarkerOptions options = new MarkerOptions();
-            options.rotation(location.getBearing());
-            options.position(latLng);
-            options.icon(iconBitmap);
+            MarkerOptions firstOptions = new MarkerOptions();
+            firstOptions.rotation(location.getBearing());
+            firstOptions.position(latLng);
+            firstOptions.icon(iconBitmap);
 
-            carMarker = mMap.addMarker(options);
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
+            carMarker = mMap.addMarker(firstOptions);
+
+            // IF NOT ZOOMING:  ?
             zooming = true;
+            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+
             return;
         }
 
         if (latLonHistory.size() > 1) { // Second (or more) update
+
             PolylineOptions polylineOptions = new PolylineOptions();
             for (LatLng ll : latLonHistory) {
                 polylineOptions.add(ll);
@@ -269,10 +268,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 llHistoryPolyline.setWidth(8);
                 llHistoryPolyline.setColor(Color.BLUE);
             }
+
+            float rad = getRadius();
+
+            if (rad > 0) {
+
+                MarkerOptions options = new MarkerOptions();
+                options.rotation(location.getBearing());
+                options.position(latLng);
+
+                if (location.getBearing() > 180) {
+                    icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_left);
+                } else if (location.getBearing() < 180) {
+                    icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_right);
+                } else {
+                    icon = BitmapFactory.decodeResource(getResources(), R.drawable.walker_right);
+                }
+
+                resized = Bitmap.createScaledBitmap(icon, (int) r, (int) r, false);
+                iconBitmap = BitmapDescriptorFactory.fromBitmap(resized);
+
+                options.icon(iconBitmap);
+
+                if (carMarker != null) {
+                    carMarker.remove();
+                }
+                carMarker = mMap.addMarker(options);
+            }
         }
 
-        if (!zooming)
+        if (!zooming) {
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+        }
     }
 
     private float getRadius() {
@@ -355,7 +382,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         });
-
     }
 
     @Override
@@ -386,12 +412,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 LatLng latLng = new LatLng(lat, lng);
                 latLonPath.add(latLng); // Add the LL to our location history
-
             }
+
             PolylineOptions polylineOptions = new PolylineOptions();
+
             for (LatLng ll : latLonPath) {
                 polylineOptions.add(ll);
-            }
+                }
 
             llRoutePolyline = mMap.addPolyline(polylineOptions);
             llRoutePolyline.setEndCap(new RoundCap());

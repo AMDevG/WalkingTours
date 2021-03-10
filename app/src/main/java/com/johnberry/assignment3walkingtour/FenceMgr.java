@@ -43,7 +43,6 @@ class FenceMgr {
                 .addOnSuccessListener(mapsActivity, aVoid -> Log.d(TAG, "onSuccess: removeGeofences"))
                 .addOnFailureListener(mapsActivity, e -> {
                     Log.d(TAG, "onFailure: removeGeofences");
-                    Toast.makeText(mapsActivity, "Trouble removing existing fences: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });
 
         new Thread(new FenceDataDownloader(mapsActivity, this)).start();
@@ -89,7 +88,7 @@ class FenceMgr {
 
         fenceList.clear();
         fenceList.addAll(fences);
-//        System.out.println("In addFences");
+
         for (FenceData fd : fenceList) {
             Geofence geofence = new Geofence.Builder()
                      .setRequestId(fd.getId())
@@ -116,9 +115,6 @@ class FenceMgr {
                     .addOnFailureListener(e -> {
                         e.printStackTrace();
                         Log.d(TAG, "onFailure: addGeofences");
-
-                        Toast.makeText(mapsActivity, "Trouble adding new fence: " + e.getMessage(), Toast.LENGTH_LONG).show();
-
                     });
         }
         mapsActivity.runOnUiThread(this::drawFences);
@@ -135,6 +131,4 @@ class FenceMgr {
         geofencePendingIntent = PendingIntent.getBroadcast(mapsActivity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         return geofencePendingIntent;
     }
-
-
 }
